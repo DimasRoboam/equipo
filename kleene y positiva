@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+// Función para generar una cadena aleatoria siguiendo la estructura de (ab*c*)+de*
+void generar_cadena(char *cadena) {
+    // Variables
+    int i, num_b, num_c, num_e;
+    
+    // Generamos una subcadena que sigue (ab*c*)+ 
+    // Primero la 'a' es fija
+    cadena[0] = 'a';
+    
+    // Determinamos aleatoriamente cuántos 'b' y 'c' habrá
+    num_b = rand() % 5;  // Entre 0 y 4 'b'
+    num_c = rand() % 5;  // Entre 0 y 4 'c'
+    
+    // Agregamos los 'b' y 'c' correspondientes
+    for (i = 1; i <= num_b; i++) {
+        cadena[i] = 'b';
+    }
+    for (i = num_b + 1; i <= num_b + num_c; i++) {
+        cadena[i] = 'c';
+    }
+
+    // Ahora agregamos la parte de 'de*'
+    int offset = num_b + num_c + 1;  // Posición después de 'ab*c*'
+    cadena[offset++] = 'd';
+    
+    // Generamos aleatoriamente el número de 'e' en 'de*'
+    num_e = rand() % 5;  // Entre 0 y 4 'e'
+    for (i = 0; i < num_e; i++) {
+        cadena[offset++] = 'e';
+    }
+
+    // Aseguramos que la cadena esté terminada
+    cadena[offset] = '\0';
+}
+
+// Función principal
+int main() {
+    srand(time(NULL));  // Inicializa la semilla aleatoria
+
+    // Solicitar al usuario el número de cadenas a generar
+    int num_cadenas;
+    printf("Ingrese el número de cadenas que desea generar: ");
+    scanf("%d", &num_cadenas);
+
+    // Buffer para almacenar las cadenas generadas
+    char conjunto_cadenas[1000] = "";  // Cadena que contendrá todas las cadenas separadas por comas
+
+    // Generar las cadenas
+    for (int i = 0; i < num_cadenas; i++) {
+        char cadena[100];  // Buffer para la cadena generada
+        generar_cadena(cadena);
+
+        // Si no es la primera cadena, agregar una coma antes de la cadena
+        if (i > 0) {
+            strcat(conjunto_cadenas, ",");
+        }
+
+        // Añadir la cadena generada al conjunto
+        strcat(conjunto_cadenas, cadena);
+    }
+
+    // Imprimir el conjunto de cadenas separadas por comas
+    printf("Conjunto de cadenas generadas: %s\n", conjunto_cadenas);
+
+    return 0;
+}
+
